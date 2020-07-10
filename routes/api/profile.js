@@ -4,7 +4,6 @@ const checkObjectId = require("../../middleware/checkObjectId");
 const { check, validationResult, oneOf } = require("express-validator");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
-const { db } = require("../../models/Profile");
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -192,7 +191,8 @@ router.put(
 		};
 
 		try {
-			const profile = await Profile.findOne({ user: req.user.id });
+            const profile = await Profile.findOne({ user: req.user.id })
+                .populate('user', ['name', 'email']);
 
 			profile.experience.unshift(newExp);
 
@@ -219,16 +219,98 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
 		}
 
 		profile.experience = profile.experience.filter((item) => {
-			item._id !== req.params.exp_id;
-		});
+			return item._id.toString() !== req.params.exp_id;
+        });
 
 		await profile.save();
 
 		res.json(profile);
 	} catch (error) {
-        console.error(error.message);
-        res.status(500).send('Server error');
-    }
+		console.error(error.message);
+		res.status(500).send("Server error");
+	}
 });
 
+// @route   PUT api/profile/education
+// @desc    Add education
+// @access  Private
+router.put(
+	"/education",
+	auth,
+	check("school", "School is required").not().isEmpty(),
+	check("degree", "Degree is required").not().isEmpty(),
+	check("fieldofstudy", "Field of study is required").not().isEmpty(),
+	check("from", "From date is required").notEmpty(),
+	async (req, res) => {
+		const error = validationResult(req);
+
+		if (!error.isEmpty()) {
+			res.status(400).json({ error: error.array() });
+		}
+
+		try {
+			const dBProfile = await Profile.findOne({ user: req.user.id });
+
+			if (!dBProfile) {
+				res.status(400).send("Profile doesn't exists");
+			}
+
+			const {
+				school,
+				degree,
+				fieldofstudy,
+				from,
+				to,
+				current,
+				description,
+			} = req.body;
+
+			const educationModel = {
+				school,
+				degree,
+				fieldofstudy,
+				from,
+				to,
+				current,
+				description,
+			};
+
+			dBProfile.education.unshift(educationModel);
+
+			await dBProfile.save();
+			res.json(dBProfile);
+		} catch (error) {
+			console.error(error.message);
+			return res.status(500).send("Server Error");
+		}
+	}
+);
+
+// @route   Delete api/profile/education
+// @desc    Remove profile education
+// @access  Private
+router.delete(
+	"/education/:edu_id",
+	auth,
+	checkObjectId("edu_id"),
+	async (req, res) => {
+		try {
+            const dBProfile = await Profile.findOne({ user: req.user.id });
+            
+			if (!dBProfile) {
+				res.status(400).send("Profile doesn't exists");
+			}
+
+			dBProfile.education = dBProfile.education.filter((item) => {
+				return item._id.toString() !== req.params.edu_id;
+            });
+
+			await dBProfile.save();
+			res.status(200).json(dBProfile);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send("Server Error");
+		}
+	}
+);
 module.exports = router;
