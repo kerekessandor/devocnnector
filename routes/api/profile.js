@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const auth = require("../../middleware/auth");
+const checkObjectId = require('../../middleware/checkObjectId');
 const { check, validationResult, oneOf } = require("express-validator");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
@@ -59,42 +60,81 @@ router.post(
 
 		//Build profile object
 		const profileFields = {
-            user: req.user.id,
-            status,
-            company,
-            website,
-            location,
-            bio,
-            githubusername
-        };
+			user: req.user.id,
+			status,
+			company,
+			website,
+			location,
+			bio,
+			githubusername,
+		};
 
 		if (skills) {
 			profileFields.skills = skills.split(",").map((skill) => skill.trim());
-        }
-        
-        //build social object
-        profileFields.social = {
-            youtube: youtube ? youtube : "",
-            facebook: facebook ? facebook : "",
-            twitter: twitter ? twitter : "",
-            instagram: instagram ? instagram : "",
-            linkedin: linkedin ? linkedin: ""
-        }
+		}
 
-        try {
-            let dBProfile = await Profile.findOneAndUpdate(
-                {user: req.user.id},
-                {$set: profileFields},
-                {new: true, upsert: true}
-            )
+		//build social object
+		profileFields.social = {
+			youtube: youtube ? youtube : "",
+			facebook: facebook ? facebook : "",
+			twitter: twitter ? twitter : "",
+			instagram: instagram ? instagram : "",
+			linkedin: linkedin ? linkedin : "",
+		};
 
-            return res.json(dBProfile);
-            
-        } catch(err) {
-            console.error(err.message);
-            res.status(500).send('Server Error');
-        }
+		try {
+			let dBProfile = await Profile.findOneAndUpdate(
+				{ user: req.user.id },
+				{ $set: profileFields },
+				{ new: true, upsert: true }
+			);
+
+			return res.json(dBProfile);
+		} catch (err) {
+			console.error(err.message);
+			res.status(500).send("Server Error");
+		}
 	}
 );
+
+// @route   Get api/profile/
+// @desc    Get a list of all user's profile
+// @access  Private
+router.get("/", async (req, res) => {
+	try {
+		const dBProfiles = await Profile.find().populate("user", [
+			"name",
+			"email",
+			"avatar",
+		]);
+
+		if (!dBProfiles) return res.send("No Profiles available");
+
+		return res.send(dBProfiles);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send("Server error");
+	}
+});
+
+// @route   Get api/profile/user/:user_id
+// @desc    Get a user's profile by Id
+// @access  Private
+router.get("/user/:user_id", checkObjectId('user_id'), async (req, res) => {
+	try {
+        const dbProfile = await Profile.findOne({user: req.params.user_id})
+        .populate('user', ['name', 'email', 'avatar']);
+
+        if (!dbProfile) {
+            return res.status(400).json({msg: "Profile not found."});
+        }
+
+        res.json(dbProfile);
+
+	} catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 module.exports = router;
