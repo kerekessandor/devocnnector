@@ -71,7 +71,7 @@ router.post(
 				user: {
 					id: user.id,
 				},
-            };
+			};
 
 			jwt.sign(
 				payload,
@@ -80,10 +80,10 @@ router.post(
 					expiresIn: 360000,
 				},
 				(error, token) => {
-                    if (error) throw error;
-					res.json({token});
+					if (error) throw error;
+					res.json({ token });
 				}
-            );
+			);
 		} catch (err) {
 			console.log(err.message);
 			res.status(500).send("server error");
