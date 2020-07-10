@@ -1,4 +1,5 @@
 {
     "mongoURI": "mongodb+srv://kaltechs:kerekes2018@devconnector.94x5d.mongodb.net/DevConnector?retryWrites=true&w=majority",
-    "jwtSecret": "hiergiuhgdvfkjnkfjfvsdvn"
+    "jwtSecret": "hiergiuhgdvfkjnkfjfvsdvn",
+    "githubToken": "2d83adb81291664893fff9ff896c9576b558d5b2"
 }

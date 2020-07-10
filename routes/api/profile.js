@@ -4,6 +4,8 @@ const checkObjectId = require("../../middleware/checkObjectId");
 const { check, validationResult, oneOf } = require("express-validator");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const config = require("config");
+const axios = require('axios').default;
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -191,8 +193,9 @@ router.put(
 		};
 
 		try {
-            const profile = await Profile.findOne({ user: req.user.id })
-                .populate('user', ['name', 'email']);
+			const profile = await Profile.findOne({
+				user: req.user.id,
+			}).populate("user", ["name", "email"]);
 
 			profile.experience.unshift(newExp);
 
@@ -220,7 +223,7 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
 
 		profile.experience = profile.experience.filter((item) => {
 			return item._id.toString() !== req.params.exp_id;
-        });
+		});
 
 		await profile.save();
 
@@ -295,15 +298,15 @@ router.delete(
 	checkObjectId("edu_id"),
 	async (req, res) => {
 		try {
-            const dBProfile = await Profile.findOne({ user: req.user.id });
-            
+			const dBProfile = await Profile.findOne({ user: req.user.id });
+
 			if (!dBProfile) {
 				res.status(400).send("Profile doesn't exists");
 			}
 
 			dBProfile.education = dBProfile.education.filter((item) => {
 				return item._id.toString() !== req.params.edu_id;
-            });
+			});
 
 			await dBProfile.save();
 			res.status(200).json(dBProfile);
@@ -313,4 +316,32 @@ router.delete(
 		}
 	}
 );
+
+// @route   GET api/profile/github/:username
+// @desc    Get user repos from github
+// @access  Private
+router.get("/github/:username", async (req, res) => {
+	try {
+		const uri = encodeURI(
+			`https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`
+		);
+		const headers = {
+			"user-agent": "node.js",
+			Authorization: `token ${config.get("githubToken")}`,
+		};
+
+		try {
+			const githubResponse = await axios.get(uri, { headers });
+			res.status(200).json(githubResponse.data);
+		} catch(error){
+			console.error(error.message);
+			res.status(400).send('No github repo found.');
+		}
+
+	} catch (error) {
+		console.error(error);
+		res.status(500).send("Server Error");
+	}
+});
+
 module.exports = router;
