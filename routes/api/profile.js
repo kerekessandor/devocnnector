@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const auth = require("../../middleware/auth");
-const checkObjectId = require('../../middleware/checkObjectId');
+const checkObjectId = require("../../middleware/checkObjectId");
 const { check, validationResult, oneOf } = require("express-validator");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
@@ -120,40 +120,40 @@ router.get("/", async (req, res) => {
 // @route   Get api/profile/user/:user_id
 // @desc    Get a user's profile by Id
 // @access  Private
-router.get("/user/:user_id", checkObjectId('user_id'), async (req, res) => {
+router.get("/user/:user_id", checkObjectId("user_id"), async (req, res) => {
 	try {
-        const dbProfile = await Profile.findOne({user: req.params.user_id})
-        .populate('user', ['name', 'email', 'avatar']);
+		const dbProfile = await Profile.findOne({
+			user: req.params.user_id,
+		}).populate("user", ["name", "email", "avatar"]);
 
-        if (!dbProfile) {
-            return res.status(400).json({msg: "Profile not found."});
-        }
+		if (!dbProfile) {
+			return res.status(400).json({ msg: "Profile not found." });
+		}
 
-        res.json(dbProfile);
-
+		res.json(dbProfile);
 	} catch (error) {
-        console.error(error.message);
-        res.status(500).send('Server Error');
-    }
+		console.error(error.message);
+		res.status(500).send("Server Error");
+	}
 });
 
 // @route   Delete api/profile/
 // @desc    Delete a profile, user & posts
 // @access  Private
 
-router.delete('/', auth, async (req, res) => {
-    try {
-        //delete profile
-        await Profile.findOneAndRemove({user: req.user.id});
+router.delete("/", auth, async (req, res) => {
+	try {
+		//delete profile
+		await Profile.findOneAndRemove({ user: req.user.id });
 
-        //delete user
-        await User.findOneAndRemove({_id: req.user.id});
+		//delete user
+		await User.findOneAndRemove({ _id: req.user.id });
 
-        res.json({msg: 'User removed'});
-    } catch(err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-})
+		res.json({ msg: "User removed" });
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send("Server Error");
+	}
+});
 
 module.exports = router;
