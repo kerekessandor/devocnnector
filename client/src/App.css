@@ -1,38 +1,549 @@
-.App {
-  text-align: center;
+html,
+body {
+	height: 100%;
+	margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4 {
+	font-family: "Montserrat", "Helvetica", "Arial", sans-serif;
+	line-height: 1.5em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.center {
+	text-align: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+h1,
+.h1 {
+	font-size: 50px;
+	line-height: 1.15em;
 }
 
-.App-link {
-  color: #61dafb;
+.btn-primary {
+	background-color: #c1d82f;
+	border: none;
+	color: #000000;
+	border-radius: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn-primary-outline {
+	background-color: #000000;
+	border: 1px solid #c1d82f;
+	color: #c1d82f;
+	border-radius: 0;
+}
+
+.page-wrap {
+	min-height: 100%;
+	margin-bottom: -64px;
+}
+
+.pageFooter {
+	height: 35px;
+	padding-top: 8px;
+	font-size: 14px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists
+ will truncate terms that are too long to fit in the left column
+*/
+.dl-horizontal dt {
+	white-space: normal;
+}
+
+.cover-container {
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	height: 100vh;
+	background-image: url("./img/headerImg.png");
+}
+
+.headerTitle {
+	font-weight: 500;
+}
+
+.motto {
+	padding-bottom: 2%;
+}
+
+.kaltech-gradient {
+	background: -webkit-linear-gradient(left, #efea17, #97c93e);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.kaltech-gradient {
+	-webkit-mask-image: -webkit-linear-gradient(
+		left,
+		#efea17,
+		#97c93e 50%,
+		#97c93e
+	);
+	-webkit-mask-image: linear-gradient(to left, #97c93e, #97c93e 50%, #97c93e);
+}
+
+.masthead a {
+	font-weight: 600;
+}
+
+.masthead a:hover {
+	color: #efea17;
+}
+
+.social-area {
+	text-align: right;
+}
+
+.social-area i {
+	margin-right: 40px;
+	font-size: 1.5em;
+}
+
+.social-area a,
+.social-area a:visited,
+.social-area a:focus {
+	color: #bfbfbf;
+}
+
+.social-area a:hover {
+	color: #efea17;
+}
+
+.rights {
+	color: #cccccc;
+	font-weight: 500;
+}
+
+.terms a {
+	color: #999999;
+	font-weight: bold;
+}
+
+.technologies-carousel li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	opacity: 0.25;
+}
+
+.technologies {
+	margin-bottom: 50px;
+}
+
+.technologies-carousel .item a img {
+	max-width: 50%;
+	opacity: 0.07;
+	transition: all 0.5s linear;
+}
+
+.owl-item.active .item img {
+	transition: all 0.5s linear;
+}
+
+.owl-item.active.center .item img {
+	opacity: 0.95 !important;
+	transition: all 0.5s linear;
+}
+
+.kaltech-upper-border {
+	background: linear-gradient(to right, #efea17, #97c93e);
+	min-height: 15px;
+}
+
+.main-container {
+	background-color: white;
+}
+
+.main-container h1 {
+	font-size: 35px;
+}
+
+.main-container h2 {
+	font-size: 20px;
+}
+
+.clearfix {
+	min-height: 30px;
+}
+
+.service-item img {
+	margin-bottom: 15px;
+}
+
+.contact {
+	min-height: 50vh;
+	border-bottom: 1px solid #e6e6e6;
+	border-top: 1px solid #e6e6e6;
+}
+
+.contact-item img {
+	margin-bottom: 25px;
+}
+
+.inquery {
+	min-height: 350px;
+	background: linear-gradient(to right, #efea17, #97c93e);
+	padding-top: 50px;
+	color: black;
+}
+
+.inquery h4 {
+	color: black;
+}
+
+/* button */
+.btn-kaltechs-background::after {
+	content: "";
+	background: #efea17;
+	-webkit-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.btn-kaltechs::after {
+	content: "";
+	position: absolute;
+	left: -20px;
+	top: 14px;
+	height: 200px;
+	width: 200px;
+	background: url(./img/dots3.png) 0 0 repeat;
+	background: #1b273d;
+	-webkit-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+	-webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+	transform: translateX(-98%) translateY(-25%) rotate(45deg);
+	opacity: 0.15;
+}
+
+.btn-kaltechs:hover::after {
+	-webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+	transform: translateX(-9%) translateY(-25%) rotate(45deg);
+	height: 604%;
+	width: 300px;
+	left: 43px;
+	border-radius: 100%;
+}
+
+.btn-kaltechs i {
+	transition-duration: 2s;
+}
+
+.btn-kaltechs:hover i {
+	-webkit-transform: translateX(-16%) translateY(-8%) rotate(49deg);
+	transform: translateX(-16%) translateY(-8%) rotate(49deg);
+	transition-duration: 2s;
+}
+
+.portfolio-mac {
+	background-repeat: no-repeat;
+	background-size: contain;
+	min-height: 600px;
+	background-position: center center;
+}
+
+.mac-content {
+	padding-top: 25px;
+	padding-left: 51px;
+}
+
+.portfolio-content h4 {
+	font-size: 25px;
+	text-align: left;
+	margin-bottom: 15px;
+}
+
+.portfolio-content p {
+	text-align: left;
+}
+
+.testmonial {
+	min-height: 60vh;
+	background-image: url(./img/upperKaltechs.png);
+	background-repeat: no-repeat;
+}
+
+.testmonial .container {
+	background-image: url(./img/bottomKaltechs.png);
+	background-repeat: no-repeat;
+}
+
+.testmonial h1 {
+	text-align: center;
+}
+
+.divider-testmonial {
+	height: 5px;
+	width: 5%;
+	background: linear-gradient(to right, #efea17, #97c93e);
+	margin-bottom: 11px;
+	margin: 8px auto;
+	border-radius: 20px;
+}
+
+.testmonials-content h4 {
+	font-size: 25px;
+	margin-bottom: 24px;
+	font-weight: 600;
+}
+
+.testmonials-content p {
+	width: 80%;
+	margin: 50px auto;
+	font-style: italic;
+}
+
+.custom-carousel-holder,
+.custom-carousel-holder1 {
+	position: relative;
+}
+
+.owl-nav i {
+	font-size: 2.5rem;
+	color: #cecece;
+}
+
+.owl-nav i:hover {
+	color: #d0de25;
+}
+
+.owl-nav .owl-next {
+	right: -60px;
+}
+
+.owl-nav .owl-prev {
+	left: -60px;
+}
+
+.owl-nav [class*="owl-"]:hover {
+	background: transparent;
+}
+
+/* - OW pull-left/pull-right */
+.ow-pull-right {
+	float: right;
+}
+.ow-pull-left {
+	float: left;
+}
+
+.custom-nav {
+	position: absolute;
+	top: 42%;
+	left: 0;
+	right: 0;
+	margin-top: 0px;
+}
+
+.custom-nav .owl-prev,
+.custom-nav .owl-next {
+	position: absolute;
+	height: auto;
+	color: inherit;
+	background: none;
+	border: none;
+	z-index: 100;
+	background: transparent !important;
+}
+
+.aboutus {
+	margin-bottom: 50px;
+}
+
+.front-card img {
+	transform: rotate(49deg);
+	animation: float 6s ease-in-out infinite;
+	overflow: hidden;
+	box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+}
+
+.portfolio-page-wrapper {
+	margin-top: 100px;
+	margin-bottom: 100px;
+}
+
+.portfolio-page-item {
+	height: 53vh;
+}
+
+.portfolio-excerpt {
+	margin-bottom: 25px;
+	pposition: relative;
+}
+
+.portfolio-excerpt h4 {
+	font-size: 20px;
+	letter-spacing: -1px;
+	color: white;
+}
+
+.portfolio-excerpt img {
+	max-height: 278px;
+}
+
+.portfolio-excerpt figcaption {
+	position: absolute;
+	bottom: 0px;
+	left: 15px;
+	max-width: 90%;
+	margin: 0;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: black;
+	padding: 25px;
+	font-size: 11px;
+	-webkit-transition: 0.45s ease-in-out;
+	transition: 0.45s ease-in-out;
+	opacity: 0;
+	z-index: 1;
+}
+
+.portfolio-excerpt .overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	-webkit-transition: 0.3s ease-in-out;
+	transition: 0.3s ease-in-out;
+	background-color: white;
+	color: black;
+}
+
+.portfolio-excerpt figure:hover figcaption,
+.portfolio-excerpt figure:hover .overlay {
+	opacity: 1;
+	cursor: pointer;
+}
+
+.relative {
+	position: relative;
+}
+
+#filters {
+	margin: 0 auto;
+	text-align: center;
+	opacity: 1;
+	height: auto;
+	z-index: 15;
+	position: relative;
+	width: 100%;
+	overflow: visible;
+	max-height: 150px;
+	padding: 0;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+#filters li {
+	display: inline-block;
+	height: 20px;
+	line-height: 20px;
+	margin: 60px 10px 80px;
+	opacity: 1;
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+#filters li a.active {
+	color: #efea17;
+}
+
+.category-meta li {
+	display: inline-block;
+	color: #efea17;
+	font-size: 11px;
+}
+
+.cover-container-simple {
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.portfolio-excerpt a:hover {
+	color: black;
+}
+
+.wpcf7-form-control-wrap {
+	position: relative;
+	width: 100%;
+}
+
+/* -----------------------------------------------------------------------
+  Large devices (large desktops, 1200px and up)
+------------------------------------------------------------------------*/
+@media (min-width: 1920px) {
+}
+
+@media (min-width: 1023px) and (max-width: 1441px) {
+}
+
+/* -----------------------------------------------------------------------
+ Large devices (large desktops, 1200px and up)
+------------------------------------------------------------------------*/
+@media (min-width: 1200px) {
+}
+/* -----------------------------------------------------------------------
+  Medium devices (desktops, UP TO 1199px~992px)
+------------------------------------------------------------------------*/
+@media (max-width: 1199px) {
+}
+/* ----------------------------------------------------------------------
+  Small devices (tablets, UP TO 991px~768px)
+-----------------------------------------------------------------------*/
+@media (max-width: 991px) {
+}
+/* ---------------------------------------------------------------------
+ Extra small devices (phones, less UP TO 767px)
+----------------------------------------------------------------------*/
+@media (max-width: 767px) {
+	.portfolio-excerpt figcaption p {
+		display: none;
+	}
+
+	.portfolio-excerpt figcaption,
+	.portfolio-excerpt figcaption a {
+		width: 100%;
+		max-width: 100%;
+		top: 0;
+		left: 0;
+	}
+
+	.portfolio-excerpt .overlay {
+		display: none;
+	}
+
+	#filters li {
+		line-height: 0px;
+		margin: 0px 10px 0px;
+	}
+
+	.portfolio-title-holder {
+		height: 60vh;
+	}
 }

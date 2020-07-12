@@ -23,7 +23,6 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "concurrently": "^5.2.0",
-    "nodemon": "^2.0.4"
+    "concurrently": "^5.2.0"
   }
 }
