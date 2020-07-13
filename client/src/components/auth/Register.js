@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
 import PropTypes from "prop-types";
 
 const Register = (props) => {
@@ -24,9 +25,18 @@ const Register = (props) => {
 			console.log("Password do not match");
 			props.setAlert("Password do not match", "danger", 5000);
 		} else {
-			console.log(formData);
+			props.register({
+				name: formData.name,
+				email: formData.email,
+				password: formData.password,
+			});
 		}
 	};
+
+	//redirect if logged in
+	if (props.isAuthenticated) {
+		return <Redirect to='/dashbaord' />;
+	}
 
 	return (
 		<div className='d-flex'>
@@ -39,7 +49,6 @@ const Register = (props) => {
 							type='text'
 							placeholder='Name'
 							name='name'
-							required
 							className='form-control'
 							value={formData.name}
 							onChange={(e) => onChange(e)}
@@ -50,7 +59,6 @@ const Register = (props) => {
 							type='email'
 							placeholder='Email Address'
 							name='email'
-							required
 							className='form-control'
 							value={formData.email}
 							onChange={(e) => onChange(e)}
@@ -66,7 +74,6 @@ const Register = (props) => {
 							type='password'
 							placeholder='Password'
 							name='password'
-							minLength='6'
 							value={formData.password}
 							onChange={(e) => onChange(e)}
 						/>
@@ -77,7 +84,6 @@ const Register = (props) => {
 							type='password'
 							placeholder='Confirm Password'
 							name='password2'
-							minLength='6'
 							value={formData.password2}
 							onChange={(e) => onChange(e)}
 						/>
@@ -95,6 +101,10 @@ const Register = (props) => {
 
 Register.propTypes = {
 	setAlert: PropTypes.func.isRequired,
+	register: PropTypes.func.isRequired,
+	isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, { setAlert })(Register);
+const mapStateToProps = state => ({ isAuthenticated: state.auth.isAuthenticated});
+
+export default connect(mapStateToProps, { setAlert, register })(Register);

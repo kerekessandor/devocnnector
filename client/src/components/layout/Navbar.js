@@ -1,9 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { logout } from "../../actions/auth";
 
 import logo from "../../img/logo.png";
 
-const Navbar = () => {
+const Navbar = ({ auth, logout}) => {
+
+	const authLinks = (
+		<React.Fragment>
+			<a onClick={logout} href='#!' className='btn btn-primary-outline'>Logout</a>
+		</React.Fragment>
+	);
+
+	const guestLinks = (
+		<React.Fragment>
+			<Link to='/login' className='btn btn-primary mr-2'>
+				Log in
+			</Link>
+
+			<Link to='/register' className='btn btn-primary-outline'>
+				Sign Up
+			</Link>
+		</React.Fragment>
+	);
+
 	return (
 		<header className='masthead'>
 			<div className='d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-transparent'>
@@ -32,16 +54,23 @@ const Navbar = () => {
 						CONTACT
 					</a>
 				</nav>
-				<Link to='/login' className='btn btn-primary mr-2'>
-					Log in
-				</Link>
-
-				<Link to='/register' className='btn btn-primary-outline'>
-					Sign Up
-				</Link>
+				{auth.isAuthenticated ? authLinks : guestLinks}				
 			</div>
 		</header>
 	);
 };
 
-export default Navbar;
+// const mapStateToProps = (state) => {
+// 	return {
+// 		auth: state.auth,
+// 	};
+// };
+
+Navbar.propTypes = {
+	logout: PropTypes.func.isRequired,
+	auth: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({ auth: state.auth });
+
+export default connect(mapStateToProps, { logout })(Navbar);

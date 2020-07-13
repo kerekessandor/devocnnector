@@ -50,7 +50,7 @@ router.post(
 
 			if (!compareResult) {
 				return res.status(400).json({
-					error: [
+					errors: [
 						{
 							msg: "Invalid credentials",
 						},
