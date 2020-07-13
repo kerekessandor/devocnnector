@@ -54,7 +54,7 @@ const Navbar = ({ auth, logout}) => {
 						CONTACT
 					</a>
 				</nav>
-				{auth.isAuthenticated ? authLinks : guestLinks}				
+				{!auth.loading && auth.isAuthenticated ? authLinks : guestLinks}				
 			</div>
 		</header>
 	);
