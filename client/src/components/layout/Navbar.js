@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 
-import logo from "../../img/logo.png";
+import logo from "../../assets/img/logo.png";
 
 const Navbar = ({ auth, logout}) => {
 
