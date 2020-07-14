@@ -72,7 +72,7 @@ h1,
 	background-position: center center;
 	background-repeat: no-repeat;
 	height: 100vh;
-	background-image: url("./img/headerImg.png");
+	background-image: url("./assets/img/headerImg.png");
 }
 
 .headerTitle {
@@ -225,7 +225,7 @@ h1,
 	top: 14px;
 	height: 200px;
 	width: 200px;
-	background: url(./img/dots3.png) 0 0 repeat;
+	background: url(./assets/img/dots3.png) 0 0 repeat;
 	background: #1b273d;
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
@@ -277,12 +277,12 @@ h1,
 
 .testmonial {
 	min-height: 60vh;
-	background-image: url(./img/upperKaltechs.png);
+	background-image: url(./assets/img/upperKaltechs.png);
 	background-repeat: no-repeat;
 }
 
 .testmonial .container {
-	background-image: url(./img/bottomKaltechs.png);
+	background-image: url(./assets/img/bottomKaltechs.png);
 	background-repeat: no-repeat;
 }
 

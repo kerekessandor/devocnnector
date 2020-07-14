@@ -8,8 +8,8 @@ import AuthLayout from "../layout/AuthLayout";
 
 const Login = ({ login, isAuthenticated }) => {
 	const [formData, setFormData] = useState({
-		email: "",
-		password: "",
+		email: "kerekessandor@yahoo.com",
+		password: "test1234",
 	});
 
 	const onChange = (e) => {
@@ -27,7 +27,7 @@ const Login = ({ login, isAuthenticated }) => {
 
 	//redirect if logged in
 	if (isAuthenticated) {
-		return <Redirect to='/dashbaord' />;
+		return <Redirect to='/dashboard' />;
 	}
 
 	return (
