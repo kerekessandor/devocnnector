@@ -6,16 +6,42 @@ import { logout } from "../../actions/auth";
 
 import logo from "../../assets/img/logo.png";
 
-const Navbar = ({ auth, logout}) => {
-
+const Navbar = ({ auth, logout }) => {
 	const authLinks = (
 		<React.Fragment>
-			<a onClick={logout} href='#!' className='btn btn-primary-outline'>Logout</a>
+			<nav className='my-2 my-md-0 mr-md-3'>
+				<Link to='/dashboard' className='p-2 text-white'>
+					Dashboard
+				</Link>
+				<a onClick={logout} href='#!' className='p-2 text-white'>
+					Logout
+				</a>
+			</nav>
 		</React.Fragment>
 	);
 
 	const guestLinks = (
 		<React.Fragment>
+			<nav className='my-2 my-md-0 mr-md-3'>
+				<Link to='/' className='p-2 text-white'>
+					HOME
+				</Link>
+				<a className='p-2 text-white' href='#about'>
+					ABOUT
+				</a>
+				<a className='p-2 text-white' href='#ourwork'>
+					OUR WORK
+				</a>
+				<a className='p-2 text-white' href='#services'>
+					SERVICES
+				</a>
+				<a className='p-2 text-white' href='#feedback'>
+					FEEDBACK
+				</a>
+				<a className='p-2 text-white' href='#inquery'>
+					CONTACT
+				</a>
+			</nav>
 			<Link to='/login' className='btn btn-primary mr-2'>
 				Log in
 			</Link>
@@ -34,27 +60,7 @@ const Navbar = ({ auth, logout}) => {
 						<img src={logo} alt='Kaltechs' />
 					</Link>
 				</h5>
-				<nav className='my-2 my-md-0 mr-md-3'>
-					<Link to='/' className='p-2 text-white'>
-						HOME
-					</Link>
-					<a className='p-2 text-white' href='#about'>
-						ABOUT
-					</a>
-					<a className='p-2 text-white' href='#ourwork'>
-						OUR WORK
-					</a>
-					<a className='p-2 text-white' href='#services'>
-						SERVICES
-					</a>
-					<a className='p-2 text-white' href='#feedback'>
-						FEEDBACK
-					</a>
-					<a className='p-2 text-white' href='#inquery'>
-						CONTACT
-					</a>
-				</nav>
-				{!auth.loading && auth.isAuthenticated ? authLinks : guestLinks}				
+				{!auth.loading && auth.isAuthenticated ? authLinks : guestLinks}
 			</div>
 		</header>
 	);
@@ -68,8 +74,8 @@ const Navbar = ({ auth, logout}) => {
 
 Navbar.propTypes = {
 	logout: PropTypes.func.isRequired,
-	auth: PropTypes.object.isRequired
-}
+	auth: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => ({ auth: state.auth });
 

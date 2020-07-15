@@ -20849,6 +20849,17 @@ label.btn {
   vertical-align: middle;
 }
 
+.spinner_full {
+  width: 50px;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
 /*------------------------------------
   Stats Progress
 ------------------------------------*/

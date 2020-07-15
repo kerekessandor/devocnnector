@@ -1,7 +1,16 @@
 import React from "react";
 import Navbar from "./Navbar";
+import PropTypes from 'prop-types'
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
-const Landing = () => {
+
+const Landing = ({isAuthenticated}) => {
+
+	if (isAuthenticated) {
+		return <Redirect to='/dashboard' />
+	}
+
 	return (
 		<div className='cover-container d-flex w-100 p-3 mx-auto flex-column'>
 			<Navbar />
@@ -19,4 +28,14 @@ const Landing = () => {
 	);
 };
 
-export default Landing;
+Landing.propTypes = {
+	isAuthenticated: PropTypes.bool
+}
+
+const mapStateToProps = (state) => {
+	return {
+		isAuthenticated: state.auth.isAuthenticated
+	}
+}
+
+export default connect(mapStateToProps)(Landing);
