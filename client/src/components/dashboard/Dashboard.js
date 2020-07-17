@@ -3,24 +3,34 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { getCurrentProfile } from "../../actions/profile";
-import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 
-import DashboardNavbar from '../layout/DashboardNavbar';
+import DashboardNavbar from "../layout/DashboardNavbar";
 
-const Dashboard = ({getCurrentProfile, auth, profile: {profile, loading}}) => {
-
+const Dashboard = ({ getCurrentProfile, auth, profile }) => {
 	useEffect(() => {
 		getCurrentProfile();
 	}, []);
 
-	return loading && profile === null ? (
+	return profile.loading && profile.profile === null ? (
 		<Spinner />
 	) : (
 		<Fragment>
-			<DashboardNavbar/>
-			<h1>Welcome {auth.user && auth.user.name}</h1>
-            {profile !== null ? <Fragment>has</Fragment> : <Fragment>no profile</Fragment>}
+			<DashboardNavbar>
+			<div className='container space-2'>
+				{profile.profile != null ? (
+					<Fragment>You have a profile</Fragment>
+				) : (
+					<div className='text-center'>
+						<p>You have not yet setup a profile, please add some info</p>
+						<Link to='/create-profile' className='btn btn-primary'>
+							Create profile
+						</Link>
+					</div>
+				)}
+			</div>
+			</DashboardNavbar>
 		</Fragment>
 	);
 };

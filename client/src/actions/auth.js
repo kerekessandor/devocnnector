@@ -7,6 +7,9 @@ import {
 	LOGIN_SUCCESS,
 	LOGIN_ERROR,
 	LOG_OUT,
+	CLEAR_PROFILE,
+	CHANGE_PASSWORD_SUCCESS,
+	CHANGE_PASSWORD_ERROR,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -44,7 +47,6 @@ export const login = (email, password) => async (dispatch) => {
 
 	try {
 		const loginResponse = await axios.post("/api/auth", body, config);
-		console.log(loginResponse);
 		dispatch({
 			type: LOGIN_SUCCESS,
 			payload: loginResponse.data,
@@ -52,7 +54,6 @@ export const login = (email, password) => async (dispatch) => {
 
 		dispatch(loadUser());
 	} catch (error) {
-		console.error(error.message);
 		const errors = error.response.data.errors;
 
 		if (errors) {
@@ -104,9 +105,59 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 	}
 };
 
+//change password
+export const changePassword = (
+	password,
+	newPassword,
+	confirmPassword,
+	history
+) => async (dispatch) => {
+	const config = {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	};
+
+	const body = JSON.stringify({
+		password,
+		newPassword,
+		confirmPassword,
+	});
+
+	try {
+		const response = await axios.post("/api/auth/resetpassword", body, config);
+
+		dispatch({
+			type: CHANGE_PASSWORD_SUCCESS,
+			payload: response.data,
+		});
+
+		dispatch(setAlert('Password updated!', 'success'));
+
+		history.push('/dashboard');
+	} catch (err) {
+		const errors = err.response.data.errors;
+
+		if (errors) {
+			errors.forEach((er) => {
+				dispatch(setAlert(er.msg, "danger"));
+			});
+		} else {
+			dispatch(setAlert(`${err.response.status}: ${err.response.statusText}`, 'danger'));
+		}
+
+		dispatch({
+			type: CHANGE_PASSWORD_ERROR,
+		});
+	}
+};
+
 //Logout User
 export const logout = () => (dispatch) => {
 	dispatch({
 		type: LOG_OUT,
+	});
+	dispatch({
+		type: CLEAR_PROFILE,
 	});
 };

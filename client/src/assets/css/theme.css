@@ -18638,6 +18638,8 @@ label.btn {
   font-weight: 900;
   content: "\f107";
   margin-left: .5rem;
+  border-top: none;
+  vertical-align: 0.01em;
 }
 
 /* Positions */
@@ -18787,7 +18789,7 @@ label.btn {
 
 .input-group .input-group-prepend > .input-group-text,
 .input-group .input-group-append > .input-group-text {
-  font-size: 0.875rem;
+  font-size: 1.175rem;
 }
 
 /* Extra Small Size */

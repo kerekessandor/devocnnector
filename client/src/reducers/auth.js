@@ -3,9 +3,11 @@ import {
 	REGISTER_FAIL,
 	USER_LOADED,
 	AUTH_ERROR,
-    LOGIN_SUCCESS,
-    LOGIN_ERROR,
+	LOGIN_SUCCESS,
+	LOGIN_ERROR,
 	LOG_OUT,
+	CHANGE_PASSWORD_ERROR,
+	CHANGE_PASSWORD_SUCCESS,
 } from "../actions/types";
 
 const initialState = {
@@ -19,13 +21,13 @@ export default (state = initialState, action) => {
 	const { type, payload } = action;
 
 	switch (type) {
-        case USER_LOADED:
-            return {
-                ...state,
-                isAuthenticated: true,
-                loading: false,
-                user: payload
-            }
+		case USER_LOADED:
+			return {
+				...state,
+				isAuthenticated: true,
+				loading: false,
+				user: payload,
+			};
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
 			localStorage.setItem("token", payload.token);
@@ -34,9 +36,9 @@ export default (state = initialState, action) => {
 				...payload,
 				isAuthenticated: true,
 				loading: false,
-            };
-        case LOGIN_ERROR:
-        case AUTH_ERROR:
+			};
+		case LOGIN_ERROR:
+		case AUTH_ERROR:
 		case REGISTER_FAIL:
 			localStorage.removeItem("token");
 			return {
@@ -46,14 +48,14 @@ export default (state = initialState, action) => {
 				loading: false,
 			};
 		case LOG_OUT:
-			localStorage.removeItem('token');
+			localStorage.removeItem("token");
 			return {
 				...state,
 				token: null,
 				isAuthenticated: false,
 				loading: false,
-				user: null
-			}
+				user: null,
+			};
 		default:
 			return state;
 	}

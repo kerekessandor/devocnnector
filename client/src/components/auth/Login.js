@@ -8,7 +8,7 @@ import AuthLayout from "../layout/AuthLayout";
 
 const Login = ({ login, isAuthenticated }) => {
 	const [formData, setFormData] = useState({
-		email: "kerekessandor@yahoo.com",
+		email: "kerekessandor87@gmail.com",
 		password: "test1234",
 	});
 
@@ -22,7 +22,6 @@ const Login = ({ login, isAuthenticated }) => {
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		login(formData.email, formData.password);
-		console.log(formData);
 	};
 
 	//redirect if logged in

@@ -5,7 +5,7 @@ const { check, validationResult, oneOf } = require("express-validator");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 const config = require("config");
-const axios = require('axios').default;
+const axios = require("axios").default;
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -40,7 +40,7 @@ router.post(
 	async (req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			res.status(400).json({ msg: errors.array() });
+			return res.status(400).json({ errors: errors.array() });
 		}
 
 		//fetch the data from the req.body
@@ -71,7 +71,9 @@ router.post(
 		};
 
 		if (skills) {
-			profileFields.skills = skills.split(",").map((skill) => skill.trim());
+			profileFields.skills = Array.isArray(skills)
+				? skills
+				: skills.split(",").map((skill) => skill.trim());
 		}
 
 		//build social object
@@ -333,11 +335,10 @@ router.get("/github/:username", async (req, res) => {
 		try {
 			const githubResponse = await axios.get(uri, { headers });
 			res.status(200).json(githubResponse.data);
-		} catch(error){
+		} catch (error) {
 			console.error(error.message);
-			res.status(400).send('No github repo found.');
+			res.status(400).send("No github repo found.");
 		}
-
 	} catch (error) {
 		console.error(error);
 		res.status(500).send("Server Error");

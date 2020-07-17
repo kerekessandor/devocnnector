@@ -19,6 +19,80 @@ router.get("/", auth, async (req, res) => {
 	}
 });
 
+// newPassword,
+// 	confirmPassword
+// @route   Post api/auth/resetpassword
+// @desc    Reset Password
+// @access  Private
+router.post(
+	"/resetpassword",
+	auth,
+	[
+		check("password", "Old password is required").not().isEmpty(),
+		check("newPassword", "New passord is required").not().isEmpty(),
+		check("confirmPassword", "Confirm password is required").not().isEmpty(),
+	],
+	async (req, res) => {
+		const validationError = validationResult(req);
+
+		if (!validationError.isEmpty()) {
+			return res.status(400).json({ errors: validationError.array() });
+		}
+
+		const { password, newPassword, confirmPassword } = req.body;
+
+		if (newPassword !== confirmPassword) {
+			return res.status(400).json({
+				errors: [
+					{msg: 'Passwords do not match.'}
+				]
+			})
+		}
+
+		if (password === newPassword) {
+			return res.status(400).json({
+				errors: [
+					{msg: 'New password is the same as old password.'}
+				]
+			})
+		}
+
+		try {
+			
+			const dbUser = await User.findById(req.user.id);
+			
+			if (!dbUser) {
+				return res.status(400).json({
+					errors: [{ msg: "Invalid credentials" }],
+				});
+			}
+
+			const compareResult = await bcrypt.compare(password, dbUser.password);
+
+			if (!compareResult) {
+				return res.status(400).json({
+					errors: [{ msg: "Invalid credentials" }],
+				});
+			}
+
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+			const updateResponse = await User.findOneAndUpdate(
+				{_id: req.user.id}, 
+				{password: hashedPassword}
+			);
+
+			res.send('success');
+
+
+		} catch (err) {
+			console.error(err.message);
+			res.status(500).json("Server error");
+		}
+	}
+);
+
 // @route   Post api/auth
 // @desc    Authenticate the user
 // @access  Public
@@ -64,15 +138,20 @@ router.post(
 				},
 			};
 
-			jwt.sign(payload, config.get("jwtSecret"), {
-				expiresIn: 360000,
-			}, (err, token) => {
-                if(err) {
-                    throw err;
-                } else {
-                    return res.send({token});
-                }
-            });
+			jwt.sign(
+				payload,
+				config.get("jwtSecret"),
+				{
+					expiresIn: 360000,
+				},
+				(err, token) => {
+					if (err) {
+						throw err;
+					} else {
+						return res.send({ token });
+					}
+				}
+			);
 		} catch (err) {
 			console.error(err.message);
 			res.status(401).json("Server error");
