@@ -21,6 +21,7 @@ import setAuthToken from "./utils/setAuthToken";
 import { useEffect } from "react";
 import CreateProfile from "./components/profile-forms/CreateProfile";
 import ChangePassword from "./components/auth/ChangePassword";
+import AddEducation from "./components/profile-forms/AddEducation";
 
 if (localStorage.token) {
 	setAuthToken(localStorage.token);
@@ -49,6 +50,11 @@ const App = () => {
 							exact
 							path='/change-password'
 							component={ChangePassword}
+						/>
+						<PrivateRoute
+							exact
+							path='/add-education'
+							component={AddEducation}
 						/>
 					</Switch>
 				</React.Fragment>
