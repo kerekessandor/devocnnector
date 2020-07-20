@@ -250,9 +250,11 @@ router.put(
 		const error = validationResult(req);
 
 		if (!error.isEmpty()) {
-			res.status(400).json({ error: error.array() });
+			return res.status(400).json({ error: error.array() });
 		}
 
+		console.log(req.body);
+		
 		try {
 			const dBProfile = await Profile.findOne({ user: req.user.id });
 

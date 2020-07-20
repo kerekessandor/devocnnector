@@ -1,13 +1,19 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import DashboardNavbar from "../layout/DashboardNavbar";
-import { getCurrentProfile } from "../../actions/profile";
+import { getCurrentProfile, saveEducation } from "../../actions/profile";
+import { Link } from "react-router-dom";
 
-const AddEducation = ({ profile, getCurrentProfile }) => {
+const AddEducation = ({ profile, getCurrentProfile, saveEducation, history }) => {
 	useEffect(() => {
 		if (!profile.profile) getCurrentProfile();
-	}, [getCurrentProfile]);
+
+		// if (!profile.loading && profile.profile && profile.profile.education) {
+		// 	setFormData(profile.profile.education);
+		// }
+
+	}, [getCurrentProfile, profile.profile]);
 
 	const [formData, setFormData] = useState([
 		{
@@ -28,6 +34,11 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 
 		setFormData(newState);
 	};
+
+	const onSubmit = (e) => {
+		e.preventDefault();
+		saveEducation(formData, history);
+	}
 
 	const addEducation = (e) => {
 		setFormData([
@@ -92,6 +103,7 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 												placeholder='School'
 												name='school'
 												value={school}
+												required
 												onChange={(e) => onChange(e, index)}
 											/>
 										</div>
@@ -103,6 +115,7 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 												placeholder='Degree'
 												name='degree'
 												value={degree}
+												required
 												onChange={(e) => onChange(e, index)}
 											/>
 										</div>
@@ -114,6 +127,7 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 												placeholder='Field Of Study'
 												name='fieldofstudy'
 												value={fieldofstudy}
+												required
 												onChange={(e) => onChange(e, index)}
 											/>
 										</div>
@@ -126,6 +140,7 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 												type='date'
 												placeholder='From'
 												name='from'
+												required
 												value={from}
 												onChange={(e) => onChange(e, index)}
 											/>
@@ -148,8 +163,8 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 													name='current'
 													checked={current}
 													onChange={(e) => {
-                                                        const copyState = [...formData];
-                                                        copyState.forEach((item) => item.current = false);
+														const copyState = [...formData];
+														copyState.forEach((item) => item.current = false);
 														copyState[index].current = !current;
 														setFormData(copyState);
 													}}
@@ -184,12 +199,12 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 						Add new
 					</button>
 					<hr className='my-7' />
-					<button type='submit' className='btn btn-success'>
+					<button type='submit' className='btn btn-success' onClick={(e) => { onSubmit(e) }}>
 						Save
 					</button>
-					<button type='button' className='btn btn-default'>
+					<Link to='/dashboard' className='btn btn-default'>
 						Cancel
-					</button>
+					</Link>
 				</form>
 			</DashboardNavbar>
 		</div>
@@ -199,10 +214,11 @@ const AddEducation = ({ profile, getCurrentProfile }) => {
 AddEducation.propTypes = {
 	profile: PropTypes.object.isRequired,
 	getCurrentProfile: PropTypes.func.isRequired,
+	saveEducation: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
 	profile: state.profile,
 });
 
-export default connect(mapStateToProps, { getCurrentProfile })(AddEducation);
+export default connect(mapStateToProps, { getCurrentProfile, saveEducation })(AddEducation);

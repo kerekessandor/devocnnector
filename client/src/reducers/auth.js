@@ -6,8 +6,6 @@ import {
 	LOGIN_SUCCESS,
 	LOGIN_ERROR,
 	LOG_OUT,
-	CHANGE_PASSWORD_ERROR,
-	CHANGE_PASSWORD_SUCCESS,
 } from "../actions/types";
 
 const initialState = {

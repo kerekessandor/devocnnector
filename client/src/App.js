@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import CreateProfile from "./components/profile-forms/CreateProfile";
 import ChangePassword from "./components/auth/ChangePassword";
 import AddEducation from "./components/profile-forms/AddEducation";
+import AddExperience from "./components/profile-forms/AddExperience";
 
 if (localStorage.token) {
 	setAuthToken(localStorage.token);
@@ -56,6 +57,7 @@ const App = () => {
 							path='/add-education'
 							component={AddEducation}
 						/>
+						<PrivateRoute exact path='/add-experience' component={AddExperience} />
 					</Switch>
 				</React.Fragment>
 			</BrowserRouter>
