@@ -21,3 +21,6 @@ export const CLEAR_PROFILE = "CLEAR_PROFILE";
 //education
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const UPDATE_PROFILE_ERROR = 'UPDATE_PROFILE_ERROR';
+
+
+export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
