@@ -127,7 +127,7 @@ router.get("/user/:user_id", checkObjectId("user_id"), async (req, res) => {
 	try {
 		const dbProfile = await Profile.findOne({
 			user: req.params.user_id,
-		}).populate("user", ["name", "email", "avatar"]);
+		}).populate("user", ["name", "email", "avatar", "date"]);
 
 		if (!dbProfile) {
 			return res.status(400).json({ msg: "Profile not found." });
@@ -327,7 +327,7 @@ router.delete(
 router.get("/github/:username", async (req, res) => {
 	try {
 		const uri = encodeURI(
-			`https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`
+			`https://api.github.com/users/${req.params.username}/repos?per_page=10&sort=created:asc`
 		);
 		const headers = {
 			"user-agent": "node.js",

@@ -4,6 +4,8 @@ import {
 	CLEAR_PROFILE,
 	UPDATE_PROFILE,
 	UPDATE_PROFILE_ERROR,
+	GET_PROFILES,
+	GET_GITHUB_REPO
 } from "../actions/types";
 
 const intitialState = {
@@ -25,6 +27,12 @@ export default (state = intitialState, action) => {
 				profile: payload,
 				loading: false,
 			};
+		case GET_PROFILES:
+			return {
+				...state,
+				profiles: payload,
+				loading: false
+			}
 		case PROFILE_ERROR:
 		case UPDATE_PROFILE_ERROR:
 			return {
@@ -39,6 +47,12 @@ export default (state = intitialState, action) => {
 				repos: [],
 				loading: false,
 			};
+		case GET_GITHUB_REPO: 
+		return {
+			...state,
+			repos: payload,
+			loading: false
+		}
 		default:
 			return state;
 	}
