@@ -13,6 +13,9 @@ export const LOG_OUT = "LOG_OUT";
 export const CHANGE_PASSWORD_SUCCESS = "CHANGE_PASSWORD_SUCCESS";
 export const CHANGE_PASSWORD_ERROR = "CHANGE_PASSWORD_ERROR";
 
+export const ACCOUNT_CONFIRM = 'ACCOUNT_CONFIRM';
+export const ACCOUNT_CONFIRM_ERROR = 'ACCOUNT_CONFIRM_ERROR';
+
 //profile
 export const GET_PROFILE = "GET_PROFILE";
 export const GET_PROFILES = "GET_PROFILES";
@@ -25,3 +28,12 @@ export const UPDATE_PROFILE = "UPDATE_PROFILE";
 export const UPDATE_PROFILE_ERROR = "UPDATE_PROFILE_ERROR";
 
 export const DELETE_ACCOUNT = "DELETE_ACCOUNT";
+
+
+//posts
+export const GET_POSTS = "GET_POSTS";
+export const POSTS_ERROR = "POSTS_ERROR";
+
+//likes
+export const UPDATE_LIKES = 'UPDATE_LIKES';
+export const ERROR_LIKE = 'ERROR_LIKE';

@@ -9,7 +9,7 @@ const ProfileCard = ({ profile: { profile } }) => {
 					<img
 						className='u-lg-avatar rounded-circle'
 						src={profile.user.avatar}
-						alt='Image Description'
+						alt={profile.user.name}
 					/>
 				</div>
 
@@ -21,14 +21,14 @@ const ProfileCard = ({ profile: { profile } }) => {
 				<div className='mb-2'>
 					<a
 						className='btn btn-sm btn-soft-primary transition-3d-hover'
-						href='#'
+						href='#!'
 					>
 						<span className='far fa-envelope mr-2'></span>
 						Send a Message
 					</a>
 				</div>
 
-				<a className='text-secondary small' href='#'>
+				<a className='text-secondary small' href='#!'>
 					<i className='far fa-flag mr-1'></i> Report this user
 				</a>
 			</div>

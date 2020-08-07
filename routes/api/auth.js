@@ -11,8 +11,9 @@ const { check, validationResult } = require("express-validator");
 // @access  Public
 router.get("/", auth, async (req, res) => {
 	try {
-		const user = await User.findById(req.user.id).select("-password");
+		const user = await User.findById(req.user.id).select("-password, -image");
 		res.json(user);
+
 	} catch (err) {
 		console.error(err.message);
 		res.status(500).send("Server Error");
@@ -43,24 +44,19 @@ router.post(
 
 		if (newPassword !== confirmPassword) {
 			return res.status(400).json({
-				errors: [
-					{msg: 'Passwords do not match.'}
-				]
-			})
+				errors: [{ msg: "Passwords do not match." }],
+			});
 		}
 
 		if (password === newPassword) {
 			return res.status(400).json({
-				errors: [
-					{msg: 'New password is the same as old password.'}
-				]
-			})
+				errors: [{ msg: "New password is the same as old password." }],
+			});
 		}
 
 		try {
-			
 			const dbUser = await User.findById(req.user.id);
-			
+
 			if (!dbUser) {
 				return res.status(400).json({
 					errors: [{ msg: "Invalid credentials" }],
@@ -79,13 +75,11 @@ router.post(
 			const hashedPassword = await bcrypt.hash(newPassword, salt);
 
 			const updateResponse = await User.findOneAndUpdate(
-				{_id: req.user.id}, 
-				{password: hashedPassword}
+				{ _id: req.user.id },
+				{ password: hashedPassword }
 			);
 
-			res.send('success');
-
-
+			res.send("success");
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).json("Server error");
@@ -117,6 +111,17 @@ router.post(
 			if (!dBUser) {
 				return res.status(400).json({
 					errors: [{ msg: "Invalid credentials" }],
+				});
+			}
+
+			if (!dBUser.confirmed) {
+				return res.status(400).json({
+					errors: [
+						{
+							msg: "Please confirm your email address.",
+						},
+					],
+					isConfirmed: false
 				});
 			}
 

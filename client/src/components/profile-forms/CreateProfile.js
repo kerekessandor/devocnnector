@@ -3,7 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import DashboardNavbar from "../layout/DashboardNavbar";
 import { Link } from "react-router-dom";
-import { createProfile, getCurrentProfile } from "../../actions/profile";
+import {
+	createProfile,
+	getCurrentProfile,
+	deleteAvatar,
+	uploadAvatar,
+} from "../../actions/profile";
 
 const initialState = {
 	company: "",
@@ -18,13 +23,17 @@ const initialState = {
 	linkedin: "",
 	youtube: "",
 	instagram: "",
+	avatar: "",
 };
 
 const CreateProfile = ({
 	createProfile,
 	getCurrentProfile,
+	deleteAvatar,
+	uploadAvatar,
 	profile,
 	history,
+	auth,
 }) => {
 	const [formData, setFormData] = useState(initialState);
 
@@ -59,7 +68,7 @@ const CreateProfile = ({
 
 			setFormData(profileData);
 		}
-	}, [getCurrentProfile, profile.profile, profile.loading]);
+	}, [getCurrentProfile, profile.profile, profile.loading, auth]);
 
 	const {
 		company,
@@ -89,8 +98,17 @@ const CreateProfile = ({
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		console.log(formData);
 		createProfile(formData, history, profile.profile ? true : false);
+	};
+
+	const onUpload = (e) => {
+		e.preventDefault();
+		uploadAvatar(e.target.files[0]);
+	};
+
+	const onDelete = (e) => {
+		e.preventDefault();
+		deleteAvatar();
 	};
 
 	const socialInputsHtml = (
@@ -213,6 +231,47 @@ const CreateProfile = ({
 			<DashboardNavbar>
 				<div className='bg-light'>
 					<div className='container space-2'>
+						<form onSubmit={(e) => onDelete(e)}>
+							<div className='row'>
+								<div className='media align-items-center mb-7 col-sm-12'>
+									<div className='u-lg-avatar mr-3'>
+										{auth.user.imageName !== null ? (
+											<img
+												className='img-fluid rounded-circle'
+												src={`/api/profile/${auth.user._id}/avatar/${auth.user.imageName}`}
+												alt={auth.user.name}
+											/>
+										) : (
+											<img
+												className='img-fluid rounded-circle'
+												src={auth.user.avatar}
+												alt={auth.user.name}
+											/>
+										)}
+									</div>
+
+									<div className='media-body'>
+										<label className='btn btn-sm btn-primary transition-3d-hover file-attachment-btn mb-1 mb-sm-0 mr-1'>
+											Upload New Picture
+											<input
+												id='fileAttachmentBtn'
+												name='file-attachment'
+												type='file'
+												className='file-attachment-btn__label'
+												onChange={(e) => onUpload(e)}
+											/>
+										</label>
+
+										<button
+											type='submit'
+											className='btn btn-sm btn-soft-secondary transition-3d-hover mb-1 mb-sm-0'
+										>
+											Delete
+										</button>
+									</div>
+								</div>
+							</div>
+						</form>
 						<form onSubmit={(e) => onSubmit(e)}>
 							<div className='row'>
 								<div className='col-sm-6 mb-6'>
@@ -352,12 +411,19 @@ CreateProfile.propTypes = {
 	createProfile: PropTypes.func.isRequired,
 	getCurrentProfile: PropTypes.func.isRequired,
 	profile: PropTypes.object.isRequired,
+	auth: PropTypes.object.isRequired,
+	deleteAvatar: PropTypes.func.isRequired,
+	uploadAvatar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	profile: state.profile,
+	auth: state.auth,
 });
 
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-	CreateProfile
-);
+export default connect(mapStateToProps, {
+	createProfile,
+	getCurrentProfile,
+	deleteAvatar,
+	uploadAvatar,
+})(CreateProfile);

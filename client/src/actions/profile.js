@@ -7,9 +7,10 @@ import {
 	CLEAR_PROFILE,
 	DELETE_ACCOUNT,
 	GET_PROFILES,
-	GET_GITHUB_REPO
+	GET_GITHUB_REPO,
 } from "./types";
 import { setAlert } from "./alert";
+import { loadUser } from "./auth";
 
 export const getCurrentProfile = () => async (dispatch) => {
 	try {
@@ -19,7 +20,6 @@ export const getCurrentProfile = () => async (dispatch) => {
 			type: GET_PROFILE,
 			payload: res.data,
 		});
-
 	} catch (err) {
 		dispatch({
 			type: PROFILE_ERROR,
@@ -27,20 +27,20 @@ export const getCurrentProfile = () => async (dispatch) => {
 		});
 
 		dispatch({
-			type: CLEAR_PROFILE
-		})
+			type: CLEAR_PROFILE,
+		});
 	}
 };
 
 //Get all profiles
-export const getProfiles = () => async dispatch => {
+export const getProfiles = () => async (dispatch) => {
 	try {
-		const response = await axios.get('/api/profile');
+		const response = await axios.get("/api/profile");
 
 		dispatch({
 			type: GET_PROFILES,
-			payload: response.data
-		})
+			payload: response.data,
+		});
 	} catch (error) {
 		console.error(error.message);
 		if (error.response.data.error) {
@@ -53,18 +53,19 @@ export const getProfiles = () => async dispatch => {
 			type: PROFILE_ERROR,
 		});
 	}
-}
+};
 
 //Get profile by Id
-export const getProfileById = (userId) => async dispatch => {
+export const getProfileById = (userId) => async (dispatch) => {
+	dispatch({ type: CLEAR_PROFILE });
+
 	try {
 		const response = await axios.get(`/api/profile/user/${userId}`);
 
 		dispatch({
 			type: GET_PROFILE,
-			payload: response.data
-		})
-
+			payload: response.data,
+		});
 	} catch (error) {
 		console.error(error.message);
 		if (error.response.data.error) {
@@ -77,18 +78,53 @@ export const getProfileById = (userId) => async dispatch => {
 			type: PROFILE_ERROR,
 		});
 	}
-}
+};
+
+export const deleteAvatar = () => async (dispatch) => {
+	try {
+		await axios.delete(`/api/profile/avatar`);
+
+		dispatch(loadUser());
+	} catch (error) {
+		dispatch({
+			type: PROFILE_ERROR,
+		});
+
+		dispatch(setAlert(error, 'error'));
+	}
+};
+
+export const uploadAvatar = (file) => async (dispatch) => {
+	try {
+		const formData = new FormData();
+		formData.append("avatar", file);
+		const config = {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		};
+
+		await axios.post("/api/profile/avatar", formData, config);
+
+		dispatch(loadUser());
+	} catch (error) {
+		dispatch({
+			type: PROFILE_ERROR,
+		});
+
+		dispatch(setAlert(error.response.data.error, 'danger'));
+	}
+};
 
 //get github repo
-export const getGithubRepository = (username) => async dispatch => {
+export const getGithubRepository = (username) => async (dispatch) => {
 	try {
 		const response = await axios.get(`/api/profile/github/${username}`);
 
 		dispatch({
 			type: GET_GITHUB_REPO,
-			payload: response.data
-		})
-
+			payload: response.data,
+		});
 	} catch (error) {
 		console.error(error.message);
 		if (error.response.data.error) {
@@ -101,7 +137,7 @@ export const getGithubRepository = (username) => async dispatch => {
 			type: PROFILE_ERROR,
 		});
 	}
-}
+};
 
 //add education
 export const saveEducation = (formData, history, edit = false) => async (

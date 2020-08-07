@@ -17,9 +17,18 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String
     },
+    image: {
+        type: Buffer
+    },
+    imageName: {
+        type: String
+    },
     date: {
         type: Date,
         default: Date.now
+    },
+    confirmed: {
+        type: Boolean
     }
 });
 

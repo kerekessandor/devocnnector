@@ -26,7 +26,7 @@ const ProfileAbout = ({ profile: { profile } }) => {
 								<span className='fas fa-envelope list-group-icon mr-3'></span>
 								<div className='media-body text-lh-sm'>
 									<span className='d-block mb-1'>Email:</span>
-									<a href='#'>{profile.user.email}</a>
+									<a href='#!'>{profile.user.email}</a>
 								</div>
 							</div>
 						</li>
@@ -36,7 +36,7 @@ const ProfileAbout = ({ profile: { profile } }) => {
 									<span className='fas fa-link list-group-icon mr-3'></span>
 									<div className='media-body text-lh-sm'>
 										<span className='d-block mb-1'>Web page:</span>
-										<a href='#'>{profile.website}</a>
+										<a href='#!'>{profile.website}</a>
 									</div>
 								</div>
 							</li>
@@ -47,7 +47,7 @@ const ProfileAbout = ({ profile: { profile } }) => {
 									<span className='fas fa-map-marker-alt list-group-icon mr-3'></span>
 									<div className='media-body text-lh-sm'>
 										<span className='d-block mb-1'>Location:</span>
-										<a href='#'>{profile.location}</a>
+										<a href='#!'>{profile.location}</a>
 									</div>
 								</div>
 							</li>
@@ -61,7 +61,7 @@ const ProfileAbout = ({ profile: { profile } }) => {
 								<span className='fas fa-building list-group-icon mr-3'></span>
 								<div className='media-body text-lh-sm'>
 									<span className='d-block mb-1'>Organization:</span>
-									<a href='#'>{profile.company}</a>
+									<a href='#!'>{profile.company}</a>
 								</div>
 							</div>
 						</li>
@@ -74,7 +74,7 @@ const ProfileAbout = ({ profile: { profile } }) => {
 										{profile.skills.map((skill) => {
 											return (
 												<Fragment>
-													<a href='#'>{skill} </a>
+													<a href='#!'>{skill} </a>
 												</Fragment>
 											);
 										})}

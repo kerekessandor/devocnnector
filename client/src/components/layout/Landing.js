@@ -2,8 +2,9 @@ import React, { Fragment } from "react";
 import Navbar from "./Navbar";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
 import Profiles from "../profiles/Profiles";
+import Posts from "../posts/Posts";
 
 const Landing = ({ isAuthenticated }) => {
 	// if (isAuthenticated) {
@@ -27,6 +28,7 @@ const Landing = ({ isAuthenticated }) => {
 				</main>
 			</div>
 			<Profiles />
+			<Posts />
 		</Fragment>
 	);
 };

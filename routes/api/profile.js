@@ -6,6 +6,8 @@ const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 const config = require("config");
 const axios = require("axios").default;
+const multer = require("multer");
+const sharp = require("sharp");
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -24,6 +26,81 @@ router.get("/me", auth, async (req, res) => {
 	} catch (err) {
 		console.error(err.message);
 		return res.status(500).json("Server error");
+	}
+});
+
+const avatar = multer({
+	limits: {
+		fileSize: 1000000,
+	},
+	fileFilter(req, file, cb) {
+		// file.originalname.match(/\.(jpg)$/);
+		//file.mimetype.indexOf("image") == -1
+		if (file.mimetype.indexOf("image") == -1) {
+			return cb(new Error("Please upload an image with jpg extension"));
+		}
+
+		cb(null, true);
+		// cb(new Error('File must be an image'));
+	},
+});
+
+// @route   POST api/profile/avatar
+// @desc    Upload a user's avatar
+// @access  Private
+router.post(
+	"/avatar",
+	auth,
+	avatar.single("avatar"),
+	async (req, res) => {
+		const buffer = await sharp(req.file.buffer)
+			.resize({
+				width: 250,
+				height: 250,
+			})
+			.png()
+			.toBuffer();
+
+		try {
+			await User.findOneAndUpdate({ _id: req.user.id }, { image: buffer, imageName: req.file.originalname });
+		} catch (error) {
+			console.log(error.message);
+			res.status(400).json(error.message);
+		}
+
+		res.send();
+	},
+	(error, req, res, next) => {
+		res.status(400).json({ error: error.message });
+	}
+);
+
+// @route   DELETE api/profile/avatar
+// @desc    Delete a user's avatar
+// @access  Private
+router.delete("/avatar", auth, async (req, res) => {
+	try {
+		await User.findOneAndUpdate(
+			{ _id: req.user.id },
+			{ image: null, imageName: null }
+		);
+		res.send();
+	} catch (error) {
+		res.status(400).json(error.message);
+	}
+});
+
+// @route   get api/profile/avatar
+// @desc    GET user's avatar
+// @access  Private
+router.get("/:id/avatar/:imageName", async (req, res) => {
+	try {
+		const dBUser = await User.findById(req.params.id);
+
+		res.set("Content-Type", "image/png");
+		res.send(dBUser.image);
+	} catch (error) {
+		return res.status(400).json(error.message);
 	}
 });
 
@@ -102,7 +179,7 @@ router.post(
 
 // @route   Get api/profile/
 // @desc    Get a list of all user's profile
-// @access  Private
+// @access  Public
 router.get("/", async (req, res) => {
 	try {
 		const dBProfiles = await Profile.find().populate("user", [
@@ -254,7 +331,7 @@ router.put(
 		}
 
 		console.log(req.body);
-		
+
 		try {
 			const dBProfile = await Profile.findOne({ user: req.user.id });
 

@@ -41,14 +41,16 @@ router.post(
 // @route   Get api/posts
 // @desc    Get all posts
 // @access  Private
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
 	try {
-		const posts = await Post.find().sort({ date: -1 });
+		const posts = await Post.find()
+			.populate("user", ["name", "email"])
+			.sort({ date: -1 });
 
 		res.status(200).json(posts);
 	} catch (error) {
 		console.error(error.message);
-		res.status(500).send("Server error");
+		res.status(500).send(`Server error: ${error.message}`);
 	}
 });
 
@@ -122,11 +124,11 @@ router.delete(
 	checkObjectId("post_id"),
 	async (req, res) => {
 		try {
-			const post = await Post. findById(req.params.post_id);
+			const post = await Post.findById(req.params.post_id);
 
 			const isLiked = post.likes.filter((item) => {
 				return item.user.toString() === req.user.id;
-			})
+			});
 
 			if (isLiked.length === 0) {
 				return res.status(400).send(false);
@@ -134,14 +136,14 @@ router.delete(
 
 			post.likes = post.likes.filter((item) => {
 				return item.user.toString() !== req.user.id;
-			})
+			});
 
 			await post.save();
 
 			return res.status(200).json(post);
 		} catch (error) {
 			console.error(error.message);
-			res.status(500).send('Server error');
+			res.status(500).send("Server error");
 		}
 	}
 );

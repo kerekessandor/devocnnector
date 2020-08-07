@@ -7,6 +7,7 @@ import {
 	LOGIN_ERROR,
 	LOG_OUT,
 	DELETE_ACCOUNT,
+	ACCOUNT_CONFIRM_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
 	isAuthenticated: false,
 	loading: true,
 	user: null,
+	confirmed: false,
 };
 
 export default (state = initialState, action) => {
@@ -46,6 +48,15 @@ export default (state = initialState, action) => {
 				isAuthenticated: false,
 				loading: false,
 			};
+		case ACCOUNT_CONFIRM_ERROR:
+			localStorage.removeItem("token");
+			return {
+				...state,
+				token: null,
+				isAuthenticated: false,
+				loading: false,
+				confirmed: false
+			}
 		case LOG_OUT:
 		case DELETE_ACCOUNT:
 			localStorage.removeItem("token");

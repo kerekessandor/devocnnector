@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../layout/Spinner";
@@ -49,11 +49,19 @@ const DashboardNavbar = ({ auth, logout, children, profile }) => {
 							<div className='col-lg-7 order-lg-1'>
 								<div className='media d-block d-sm-flex align-items-sm-center'>
 									<div className='u-lg-avatar position-relative mb-3 mb-sm-0 mr-3'>
-										<img
-											className='img-fluid rounded-circle'
-											src={auth.user.avatar}
-											alt={auth.user.name}
-										/>
+									{auth.user.imageName !== null ? (
+											<img
+												className='img-fluid rounded-circle'
+												src={`/api/profile/${auth.user._id}/avatar/${auth.user.imageName}`}
+												alt={auth.user.name}
+											/>
+										) : (
+											<img
+												className='img-fluid rounded-circle'
+												src={auth.user.avatar}
+												alt={auth.user.name}
+											/>
+										)}
 									</div>
 									<div className='media-body'>
 										<h1 className='h3 text-white font-weight-medium mb-1'>
@@ -109,18 +117,30 @@ const DashboardNavbar = ({ auth, logout, children, profile }) => {
 													>
 														{profile.profile && (
 															<Fragment>
-																<Link to='/create-profile' className='dropdown-item'>
+																<Link
+																	to='/create-profile'
+																	className='dropdown-item'
+																>
 																	Edit Profile
 																</Link>
-																<Link to='/add-experience' className='dropdown-item'>
+																<Link
+																	to='/add-experience'
+																	className='dropdown-item'
+																>
 																	Add Experience
 																</Link>
-																<Link to='/add-education' className='dropdown-item'>
+																<Link
+																	to='/add-education'
+																	className='dropdown-item'
+																>
 																	Add Education
 																</Link>
 															</Fragment>
 														)}
-														<Link to='/change-password' className='dropdown-item'>
+														<Link
+															to='/change-password'
+															className='dropdown-item'
+														>
 															Change password
 														</Link>
 													</div>

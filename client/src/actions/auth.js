@@ -10,6 +10,7 @@ import {
 	CLEAR_PROFILE,
 	CHANGE_PASSWORD_SUCCESS,
 	CHANGE_PASSWORD_ERROR,
+	ACCOUNT_CONFIRM_ERROR,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -65,6 +66,12 @@ export const login = (email, password) => async (dispatch) => {
 		dispatch({
 			type: LOGIN_ERROR,
 		});
+
+		if (errors.isConfirmed !== undefined && !errors.isConfirmed) {
+			dispatch({
+				type: ACCOUNT_CONFIRM_ERROR,
+			});
+		}
 	}
 };
 
@@ -132,9 +139,9 @@ export const changePassword = (
 			payload: response.data,
 		});
 
-		dispatch(setAlert('Password updated!', 'success'));
+		dispatch(setAlert("Password updated!", "success"));
 
-		history.push('/dashboard');
+		history.push("/dashboard");
 	} catch (err) {
 		const errors = err.response.data.errors;
 
@@ -143,7 +150,9 @@ export const changePassword = (
 				dispatch(setAlert(er.msg, "danger"));
 			});
 		} else {
-			dispatch(setAlert(`${err.response.status}: ${err.response.statusText}`, 'danger'));
+			dispatch(
+				setAlert(`${err.response.status}: ${err.response.statusText}`, "danger")
+			);
 		}
 
 		dispatch({

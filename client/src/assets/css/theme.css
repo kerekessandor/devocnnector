@@ -22959,3 +22959,7 @@ label.btn {
 /*------------------------------------
   File for your custom SCSS style
 ------------------------------------*/
+.avatar-img {
+  border-radius: 100%;
+  width: 16%;
+}
