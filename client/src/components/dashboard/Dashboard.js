@@ -9,6 +9,7 @@ import Spinner from "../layout/Spinner";
 import DashboardNavbar from "../layout/DashboardNavbar";
 import Experience from "./Experience";
 import Education from "./Education";
+import ConfirmEmailError from "../auth/ConfirmEmailError";
 
 const Dashboard = ({ getCurrentProfile, auth, profile, deleteAccount }) => {
 	useEffect(() => {
@@ -20,33 +21,43 @@ const Dashboard = ({ getCurrentProfile, auth, profile, deleteAccount }) => {
 	) : (
 		<Fragment>
 			<DashboardNavbar>
-				<div className='container space-2'>
-					{profile.profile != null ? (
-						<Fragment>
-							{profile.profile.experience.length ? (
-								<Experience experience={profile.profile.experience} />
-							) : (
-								<div className='text-center'>
-									<Link to='/add-experience' className='btn btn-success btn-sm'>
-										Add new experience
-									</Link>
-								</div>
-							)}
-							<Education education={profile.profile.education} />
+				{!auth.user.confirmed ? (
+					<ConfirmEmailError />
+				) : (
+					<div className='container space-2'>
+						{profile.profile != null ? (
+							<Fragment>
+								{profile.profile.experience.length ? (
+									<Experience experience={profile.profile.experience} />
+								) : (
+									<div className='text-center'>
+										<Link
+											to='/add-experience'
+											className='btn btn-success btn-sm'
+										>
+											Add new experience
+										</Link>
+									</div>
+								)}
+								<Education education={profile.profile.education} />
 
-							<button className="btn btn-sm btn-danger" onClick={() => deleteAccount()}>
-								Delete My Account
-							</button>
-						</Fragment>
-					) : (
-						<div className='text-center'>
-							<p>You have not yet setup a profile, please add some info</p>
-							<Link to='/create-profile' className='btn btn-primary'>
-								Create profile
-							</Link>
-						</div>
-					)}
-				</div>
+								<button
+									className='btn btn-sm btn-danger'
+									onClick={() => deleteAccount()}
+								>
+									Delete My Account
+								</button>
+							</Fragment>
+						) : (
+							<div className='text-center'>
+								<p>You have not yet setup a profile, please add some info</p>
+								<Link to='/create-profile' className='btn btn-primary'>
+									Create profile
+								</Link>
+							</div>
+						)}
+					</div>
+				)}
 			</DashboardNavbar>
 		</Fragment>
 	);
@@ -66,4 +77,6 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(Dashboard);
+export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
+	Dashboard
+);

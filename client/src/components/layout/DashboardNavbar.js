@@ -49,7 +49,7 @@ const DashboardNavbar = ({ auth, logout, children, profile }) => {
 							<div className='col-lg-7 order-lg-1'>
 								<div className='media d-block d-sm-flex align-items-sm-center'>
 									<div className='u-lg-avatar position-relative mb-3 mb-sm-0 mr-3'>
-									{auth.user.imageName !== null ? (
+									{auth.user.imageName !== null && auth.user.imageName !== undefined ? (
 											<img
 												className='img-fluid rounded-circle'
 												src={`/api/profile/${auth.user._id}/avatar/${auth.user.imageName}`}

@@ -10,7 +10,6 @@ import {
 	CLEAR_PROFILE,
 	CHANGE_PASSWORD_SUCCESS,
 	CHANGE_PASSWORD_ERROR,
-	ACCOUNT_CONFIRM_ERROR,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -66,12 +65,6 @@ export const login = (email, password) => async (dispatch) => {
 		dispatch({
 			type: LOGIN_ERROR,
 		});
-
-		if (errors.isConfirmed !== undefined && !errors.isConfirmed) {
-			dispatch({
-				type: ACCOUNT_CONFIRM_ERROR,
-			});
-		}
 	}
 };
 

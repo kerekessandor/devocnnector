@@ -235,7 +235,7 @@ const CreateProfile = ({
 							<div className='row'>
 								<div className='media align-items-center mb-7 col-sm-12'>
 									<div className='u-lg-avatar mr-3'>
-										{auth.user.imageName !== null ? (
+										{auth.user.imageName !== null && auth.user.imageName !== undefined ? (
 											<img
 												className='img-fluid rounded-circle'
 												src={`/api/profile/${auth.user._id}/avatar/${auth.user.imageName}`}

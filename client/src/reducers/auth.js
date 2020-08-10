@@ -15,7 +15,6 @@ const initialState = {
 	isAuthenticated: false,
 	loading: true,
 	user: null,
-	confirmed: false,
 };
 
 export default (state = initialState, action) => {
@@ -55,7 +54,6 @@ export default (state = initialState, action) => {
 				token: null,
 				isAuthenticated: false,
 				loading: false,
-				confirmed: false
 			}
 		case LOG_OUT:
 		case DELETE_ACCOUNT:

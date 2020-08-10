@@ -8195,6 +8195,10 @@ button.bg-indigo:focus {
   height: 100vh !important;
 }
 
+.vh-75 {
+  height: 75vh !important;
+}
+
 .stretched-link::after {
   position: absolute;
   top: 0;

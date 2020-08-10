@@ -24,6 +24,7 @@ import ChangePassword from "./components/auth/ChangePassword";
 import AddEducation from "./components/profile-forms/AddEducation";
 import AddExperience from "./components/profile-forms/AddExperience";
 import Profile from './components/profile/Profile';
+import ConfirmEmail from "./components/layout/ConfirmEmail";
 
 if (localStorage.token) {
 	setAuthToken(localStorage.token);
@@ -43,6 +44,7 @@ const App = () => {
 						<Route exact path='/register' component={Register} />
 						<Route exact path='/login' component={Login} />
 						<Route exact path='/profile/:id' component={Profile} />
+						<Route exact path='/confirm/:id' component={ConfirmEmail} />
 						<PrivateRoute exact path='/dashboard' component={Dashboard} />
 						<PrivateRoute
 							exact

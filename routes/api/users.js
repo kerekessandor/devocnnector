@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 const User = require("../../models/User");
+const { sendConfirmationEmail } = require("../../email/emailServices");
 
 // @route   POST api/users
 // @desc    Register user
@@ -82,6 +83,7 @@ router.post(
 				},
 				(error, token) => {
 					if (error) throw error;
+					sendConfirmationEmail(user._id, user.email, user.name);
 					res.json({ token });
 				}
 			);

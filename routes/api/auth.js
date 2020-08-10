@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const auth = require("../../middleware/auth");
 const User = require("../../models/User");
 const { check, validationResult } = require("express-validator");
+const { sendConfirmationEmail } = require("../../email/emailServices");
 
 // @route   GET api/auth
 // @desc    Test route
@@ -13,7 +14,6 @@ router.get("/", auth, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id).select("-password, -image");
 		res.json(user);
-
 	} catch (err) {
 		console.error(err.message);
 		res.status(500).send("Server Error");
@@ -87,6 +87,57 @@ router.post(
 	}
 );
 
+// @route   Get api/auth/confirm
+// @desc    Confirm users email
+// @access  Public
+router.get("/confirm/:user_id", async (req, res) => {
+	try {
+		const dBUser = await User.findById(req.params.user_id).select('-password, -image');
+
+		if (dBUser === null) {
+			return res.status(400).json({
+				errors: [{ msg: "Profile not found." }],
+			});
+		}
+
+		dBUser.confirmed = true;
+
+		dBUser.save();
+
+		res.status(200).json();
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).send("Server Error");
+	}
+});
+
+// @route   Get api/auth/confirm
+// @desc    Send Confirm users email
+// @access  Public
+
+router.get("/sendconfirm", auth, async (req, res) => {
+	try {
+		const dBuser = await User.findById(req.user.id);
+
+		if (dBuser === null) {
+			return res.status(400).json({
+				errors: [
+					{
+						msg: "Profile not found",
+					},
+				],
+			});
+		}
+
+		sendConfirmationEmail(req.user.id, dBuser.email, dBuser.name);
+
+		res.send('Success');
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).send("Server error");
+	}
+});
+
 // @route   Post api/auth
 // @desc    Authenticate the user
 // @access  Public
@@ -114,16 +165,16 @@ router.post(
 				});
 			}
 
-			if (!dBUser.confirmed) {
-				return res.status(400).json({
-					errors: [
-						{
-							msg: "Please confirm your email address.",
-						},
-					],
-					isConfirmed: false
-				});
-			}
+			// if (!dBUser.confirmed) {
+			// 	return res.status(400).json({
+			// 		errors: [
+			// 			{
+			// 				msg: "Please confirm your email address.",
+			// 			},
+			// 		],
+			// 		isConfirmed: false,
+			// 	});
+			// }
 
 			const compareResult = await bcrypt.compare(password, dBUser.password);
 
